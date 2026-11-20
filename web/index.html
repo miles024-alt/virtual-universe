@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08131c">
+  <meta name="description" content="Explore the OMNIVERSE creator prototype directly in your browser.">
+  <title>OMNIVERSE — Browser Sandbox</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="player">
+    <canvas id="world" aria-label="Interactive 3D OMNIVERSE world"></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="topbar">
+      <a class="brand" href="#" aria-label="OMNIVERSE home">OMNI<span>VERSE</span></a>
+      <div class="build-tag"><i></i> CREATOR SANDBOX <span>·</span> ALPHA 0.0.1</div>
+      <button id="menu-button" class="icon-button" type="button" aria-label="Open creator menu">☰</button>
+    </div>
+
+    <section class="hud" id="hud" aria-live="polite">
+      <div class="location-card">
+        <span class="eyebrow">CURRENT LOCATION</span>
+        <strong id="location">CENTRAL PLAZA</strong>
+        <span class="subline" id="coordinates">0.0 / 0.0</span>
+      </div>
+      <div class="exploration-card">
+        <div class="exploration-title"><span>WORLD EXPLORATION</span><strong id="discovery-count">0 / 5</strong></div>
+        <div class="progress-track"><span id="discovery-progress"></span></div>
+        <div class="stamina-row"><span>STAMINA</span><div class="stamina-track"><span id="stamina"></span></div><b id="stamina-value">100%</b></div>
+      </div>
+      <div class="map-card">
+        <div class="map-title">WORLD MAP <span>N</span></div>
+        <canvas id="map" width="160" height="160" aria-label="World minimap"></canvas>
+        <div class="map-footer"><i></i> CREATOR LOCATION</div>
+      </div>
+    </section>
+
+    <div id="crosshair" class="crosshair" aria-hidden="true"><i></i><b></b></div>
+    <div id="toast" class="toast" role="status"></div>
+    <div id="npc-prompt" class="npc-prompt" role="status" hidden></div>
+    <div id="bottom-hint" class="bottom-hint">CLICK WORLD TO CAPTURE MOUSE <span>·</span> ESC TO RELEASE</div>
+
+    <aside id="creator-panel" class="creator-panel" aria-label="Creator control centre">
+      <div class="panel-heading">
+        <div><span class="eyebrow">WORLD OPERATIONS</span><h2>Creator tools</h2></div>
+        <button id="close-panel" class="icon-button" type="button" aria-label="Close creator tools">×</button>
+      </div>
+      <div class="world-status"><span class="online-dot"></span><span>WORLD STATUS</span><strong>LOCAL · ACTIVE</strong></div>
+      <div class="panel-section">
+        <span class="eyebrow">QUICK TRAVEL</span>
+        <button class="travel-button" data-teleport="plaza"><span>01</span> Central Plaza <b>↗</b></button>
+        <button class="travel-button" data-teleport="homes"><span>02</span> Residential District <b>↗</b></button>
+        <button class="travel-button" data-teleport="market"><span>03</span> Commercial District <b>↗</b></button>
+        <button class="travel-button" data-teleport="tower"><span>04</span> Observation Tower <b>↗</b></button>
+        <button class="travel-button" data-teleport="coast"><span>05</span> Coastline <b>↗</b></button>
+      </div>
+      <div class="panel-actions">
+        <button id="save-button" class="primary-button" type="button">SAVE EXPLORER STATE</button>
+        <button id="load-button" class="secondary-button" type="button">LOAD LOCAL SAVE</button>
+        <button id="camera-button" class="secondary-button" type="button">SWITCH CAMERA · THIRD PERSON</button>
+        <button id="earth-atlas-button" class="secondary-button" type="button">OPEN EARTH ATLAS</button>
+      </div>
+      <p class="panel-note">Your progress is stored only in this browser.</p>
+    </aside>
+
+    <section id="earth-atlas" class="earth-atlas" aria-label="Earth atlas" aria-hidden="true">
+      <div class="atlas-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">PLANETARY NAVIGATION</span><h2>Earth atlas</h2></div>
+          <button id="close-atlas" class="icon-button" type="button" aria-label="Close Earth atlas">×</button>
+        </div>
+        <p class="atlas-description">Choose a regional hub to explore. Each stop loads a procedural local environment.</p>
+        <svg class="earth-map" viewBox="0 0 720 320" role="img" aria-label="Stylized map of Earth's continents">
+          <rect width="720" height="320" rx="8" fill="#102f3a"/>
+          <path d="M56 77 91 45 147 36 178 55 193 86 177 104 154 112 139 138 117 141 104 174 83 165 78 132 59 115Z
+            M177 177 202 186 216 210 212 241 199 275 186 261 181 231 167 208Z
+            M302 83 328 65 351 72 362 92 353 111 330 115 317 103Z
+            M317 117 355 111 380 129 375 166 362 193 348 221 333 215 325 185 306 157Z
+            M361 75 407 52 466 48 510 61 550 64 588 81 624 105 612 126 577 129 554 146 526 137 501 151 474 139 450 123 423 132 400 119 380 124 359 106Z
+            M564 188 599 179 628 194 635 218 616 236 582 228 561 210Z
+            M273 282 329 276 388 281 450 277 511 284 547 278 532 296 482 304 423 299 368 307 316 301 282 293Z"
+            fill="#547d63" stroke="#90ad83" stroke-width="2"/>
+          <path d="M80 105 115 88 146 97 165 79M347 138 361 156 351 181M432 83 476 94 507 83 545 104"
+            fill="none" stroke="#7ea68d" stroke-width="4" opacity=".55"/>
+          <text x="360" y="24" text-anchor="middle" fill="#b9cecc" font-size="12" letter-spacing="3">EARTH · REGIONAL HUBS</text>
+        </svg>
+        <div class="region-grid">
+          <button class="region-button" data-region="new-york"><span>NORTH AMERICA</span><strong>New York</strong><small>40.7° N · 74.0° W</small></button>
+          <button class="region-button" data-region="rio"><span>SOUTH AMERICA</span><strong>Amazon Basin</strong><small>3.1° S · 60.0° W</small></button>
+          <button class="region-button" data-region="london"><span>EUROPE</span><strong>London</strong><small>51.5° N · 0.1° W</small></button>
+          <button class="region-button" data-region="nairobi"><span>AFRICA</span><strong>Nairobi</strong><small>1.3° S · 36.8° E</small></button>
+          <button class="region-button" data-region="cairo"><span>MIDDLE EAST</span><strong>Cairo</strong><small>30.0° N · 31.2° E</small></button>
+          <button class="region-button" data-region="tokyo"><span>ASIA</span><strong>Tokyo</strong><small>35.7° N · 139.7° E</small></button>
+          <button class="region-button" data-region="sydney"><span>OCEANIA</span><strong>Sydney</strong><small>33.9° S · 151.2° E</small></button>
+          <button class="region-button" data-region="antarctica"><span>ANTARCTICA</span><strong>Research Station</strong><small>77.8° S · 166.7° E</small></button>
+        </div>
+        <p class="atlas-note">Regional hubs are early procedural prototypes, not a complete 1:1 Earth simulation.</p>
+      </div>
+    </section>
+
+    <section id="landing" class="landing">
+      <div class="landing-backdrop"></div>
+      <div class="landing-content">
+        <div class="landing-kicker"><span></span> A WORLD IN THE MAKING</div>
+        <div class="landing-title">OMNI<span>VERSE</span></div>
+        <p class="landing-description">One creator. One world. A universe waiting to be explored.</p>
+        <div class="landing-divider"><i></i><span>CREATOR EXPLORATION PROTOTYPE</span><i></i></div>
+        <button id="enter-button" class="enter-button" type="button"><span>ENTER THE WORLD</span><b>→</b></button>
+        <div class="landing-meta"><span>ALPHA 0.0.1</span><i></i><span>RUNNING IN YOUR BROWSER</span></div>
+      </div>
+      <div class="landing-bottom">NO INSTALLATION <span>·</span> NO ACCOUNT <span>·</span> YOUR LOCAL SANDBOX</div>
+    </section>
+
+    <div id="touch-controls" class="touch-controls" aria-label="Touch controls">
+      <div class="dpad">
+        <button data-control="forward" aria-label="Move forward">▲</button>
+        <div><button data-control="left" aria-label="Move left">◀</button><button data-control="back" aria-label="Move backward">▼</button><button data-control="right" aria-label="Move right">▶</button></div>
+      </div>
+      <div class="touch-actions"><button data-control="interact">TALK</button><button data-control="run">RUN</button><button data-control="jump">JUMP</button><button data-control="camera">CAM</button></div>
+    </div>
+  </main>
+  <script src="player.js?v=earth-atlas-npcs-1"></script>
+</body>
+</html>
