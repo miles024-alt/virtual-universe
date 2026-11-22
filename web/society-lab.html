@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08131c">
+  <title>OMNIVERSE — Society Lab</title>
+  <style>
+    :root{color-scheme:dark;--bg:#08131c;--panel:#10212a;--line:#29414a;--ink:#edf4f3;--muted:#9aafb0;--mint:#73d6c5;--gold:#e5bd78;--red:#e58b7e;font:15px/1.5 "Segoe UI",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 0,#17313b,var(--bg) 55%);color:var(--ink)}button,select{font:inherit;color:inherit}button{border:1px solid var(--line);border-radius:8px;background:#142832;padding:9px 12px;cursor:pointer}button:hover,button:focus-visible,select:focus-visible{border-color:var(--mint);outline:2px solid transparent}button[aria-pressed=true]{border-color:var(--mint);color:var(--mint)}header,main{width:min(1180px,calc(100% - 32px));margin:auto}header{padding:24px 0 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}a{color:var(--mint)}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(25px,4vw,38px);margin-bottom:2px}h2{font-size:18px;margin-bottom:12px}.eyebrow{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}.sub{color:var(--muted);margin:0}.notice{margin:8px 0 18px;padding:12px 14px;border:1px solid #6b5935;background:#2a2519;border-radius:9px;color:#eadbb8;font-size:13px}.grid{display:grid;grid-template-columns:1.05fr 1.4fr 1fr;gap:14px}.card{background:rgba(16,33,42,.94);border:1px solid var(--line);border-radius:12px;padding:17px;min-width:0}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}.metric{padding:12px;background:#10212a;border:1px solid var(--line);border-radius:10px}.metric span{display:block;color:var(--muted);font:10px ui-monospace,monospace;text-transform:uppercase}.metric strong{display:block;font-size:22px;margin-top:3px}.meter{height:6px;border-radius:8px;background:#24363d;overflow:hidden;margin:6px 0 12px}.meter i{height:100%;display:block;background:var(--mint);transition:width .2s}.meter.warning i{background:var(--gold)}.meter.danger i{background:var(--red)}.policy{display:grid;gap:8px}.policy button{text-align:left}.policy button strong,.policy button small{display:block}.policy small{color:var(--muted);margin-top:3px}.citizens{display:grid;gap:8px;max-height:490px;overflow:auto}.citizen{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px;padding:10px;border:1px solid var(--line);border-radius:9px;background:#0d1d25}.citizen.selected{border-color:var(--mint)}.citizen button{grid-row:span 2}.citizen strong{font-size:14px}.citizen small{color:var(--muted)}.inspector{margin-top:12px;padding:12px;background:#0b1a21;border-radius:9px;min-height:120px}.inspector p{margin:4px 0;color:var(--muted);font-size:13px}.barline{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px}.log{height:230px;overflow:auto;padding:0;list-style:none}.log li{padding:8px 0;border-bottom:1px solid #20353d;font-size:12px}.log time{display:block;color:var(--muted);font:10px ui-monospace,monospace}.row{display:flex;flex-wrap:wrap;gap:8px}.row button{flex:1}.status{color:var(--mint);font:11px ui-monospace,monospace}.footer{padding:18px 0 28px;color:var(--muted);font-size:12px}.footer p{margin:5px 0}@media(max-width:850px){.grid{grid-template-columns:1fr 1fr}.grid>.card:last-child{grid-column:1/-1}.metrics{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){header{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.grid>.card:last-child{grid-column:auto}.metrics{gap:7px}.metric{padding:9px}.metric strong{font-size:19px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div><div class="eyebrow">OMNIVERSE · EXPERIMENTAL LOCAL PROTOTYPE</div><h1>Society Lab</h1><p class="sub">A small, inspectable simulation of people, work, civic choices, and nature.</p></div>
+    <a href="index.html">← Return to the world sandbox</a>
+  </header>
+  <main>
+    <div class="notice"><strong>Prototype boundaries:</strong> These are simulated characters, not real people or conscious minds. This lab runs only in this browser; it has no multiplayer, accounts, real currency, surveillance, secure admin service, or real-world government. Admin actions affect this local simulation only.</div>
+    <section class="metrics" aria-label="Society indicators">
+      <div class="metric"><span>Population</span><strong id="population">—</strong></div>
+      <div class="metric"><span>Community trust</span><strong id="trust-value">—</strong><div class="meter" id="trust-meter"><i></i></div></div>
+      <div class="metric"><span>Nature balance</span><strong id="nature-value">—</strong><div class="meter" id="nature-meter"><i></i></div></div>
+      <div class="metric"><span>Social tension</span><strong id="tension-value">—</strong><div class="meter" id="tension-meter"><i></i></div></div>
+    </section>
+    <div class="grid">
+      <section class="card" aria-labelledby="gov-title">
+        <div class="eyebrow">CIVIC SYSTEM</div><h2 id="gov-title">Government & policy</h2>
+        <p id="government" class="sub">—</p>
+        <p id="treasury" class="sub">—</p>
+        <div class="policy" id="policy-options" aria-label="Choose a public policy"></div>
+        <div class="row" style="margin-top:12px"><button id="deescalate" type="button">Fund peace talks</button><button id="pause" type="button" aria-pressed="false">Pause simulation</button></div>
+        <p class="footer" style="padding:8px 0 0">Policy choices affect treasury, trust, ecology and tension over time. Changes are logged.</p>
+      </section>
+      <section class="card" aria-labelledby="people-title">
+        <div class="eyebrow">AUTONOMOUS SIMS · BOUNDED RULES</div><h2 id="people-title">People & work</h2>
+        <p class="sub" style="margin-bottom:10px">Select a resident to inspect their current needs, job, goals and recent action.</p>
+        <div class="citizens" id="citizens" aria-live="polite"></div>
+        <div class="inspector" id="inspector" aria-live="polite">Select a resident to inspect their simulated state.</div>
+      </section>
+      <section class="card" aria-labelledby="nature-title">
+        <div class="eyebrow">WORLD HISTORY · LOCAL AUDIT</div><h2 id="nature-title">Events & oversight</h2>
+        <div class="row"><button id="inspect-toggle" type="button" aria-pressed="true">Inspection: on</button><button id="reset" type="button">Reset world</button></div>
+        <p class="sub" style="margin:10px 0">Inspection is visible and limited to simulated residents in this browser.</p>
+        <ul class="log" id="event-log" aria-live="polite"></ul>
+      </section>
+    </div>
+    <div class="footer"><p><strong>Design principle:</strong> creator oversight is powerful but observable and audited; people should retain privacy, clear rules, and protection from abuse. This demonstration is not a secure control plane.</p><p>Autonomy here means rule-based action selection, not free will. Economic units are fictional, non-transferable local credits.</p></div>
+  </main>
+  <script>
+  (()=>{
+    "use strict";
+    const KEY="omniverse-society-lab-v1";
+    const templates=[
+      {name:"Maya Chen",job:"Park gardener",trait:"Curious · cooperative",goal:"Restore the plaza garden",wealth:0,skills:12,needs:{energy:72,social:58,purpose:45},home:"Central Plaza"},
+      {name:"Amina Okafor",job:"Apprentice researcher",trait:"Patient · analytical",goal:"Study local water quality",wealth:8,skills:24,needs:{energy:64,social:42,purpose:68},home:"Research Quarter"},
+      {name:"Kenji Sato",job:"Market assistant",trait:"Sociable · inventive",goal:"Open a repair workshop",wealth:18,skills:35,needs:{energy:55,social:76,purpose:51},home:"Market District"},
+      {name:"Leo Martins",job:"Courier",trait:"Independent · adventurous",goal:"Build a reliable delivery route",wealth:32,skills:42,needs:{energy:61,social:39,purpose:60},home:"Coast Road"},
+      {name:"Nia Patel",job:"Community nurse",trait:"Empathetic · steady",goal:"Improve neighborhood wellbeing",wealth:46,skills:58,needs:{energy:69,social:62,purpose:74},home:"Residential District"},
+      {name:"Omar Haddad",job:"Workshop trainee",trait:"Ambitious · practical",goal:"Earn a skilled-trade certificate",wealth:65,skills:51,needs:{energy:47,social:50,purpose:55},home:"Workshop Lane"},
+      {name:"Elena Rossi",job:"Small business owner",trait:"Bold · fair-minded",goal:"Make the market accessible",wealth:110,skills:73,needs:{energy:58,social:68,purpose:66},home:"Market District"},
+      {name:"Sam Rivera",job:"Council organizer",trait:"Reflective · civic-minded",goal:"Earn community trust",wealth:175,skills:81,needs:{energy:63,social:71,purpose:82},home:"Civic Square"}
+    ];
+    const policies={
+      balanced:{label:"Balanced services",description:"Moderate tax, steady public services, and managed resource use.",tax:2,trust:1,nature:1,tension:-.4},
+      green:{label:"Nature-first investment",description:"Invest in restoration; slower growth, healthier habitats.",tax:3,trust:.3,nature:2.2,tension:-.5},
+      austerity:{label:"Rapid growth / low services",description:"Faster private growth, lower public spending and rising inequality risk.",tax:1,trust:-1.1,nature:-1.1,tension:1.2}
+    };
+    const $=id=>document.getElementById(id);
+    const clamp=n=>Math.max(0,Math.min(100,n));
+    const fresh=()=>({version:1,tick:0,trust:62,nature:72,tension:14,treasury:240,policy:"balanced",paused:false,inspect:true,selected:0,citizens:templates.map((t,i)=>({...structuredClone(t),id:`resident-${i+1}`,rank:i<2?"Starting out":i<5?"Skilled worker":i<7?"Business / professional":"Civic leader",action:"Starting the day",experience:0,actionTimer:3+i,history:[]})),events:[{tick:0,text:"Society simulation started. Residents begin with different goals and starting resources."}]});
+    let state;
+    try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");state=saved&&saved.version===1&&Array.isArray(saved.citizens)&&saved.citizens.length===templates.length?{...fresh(),...saved}:fresh()}catch(_){state=fresh()}
+    const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(_){addEvent("Could not save local state; browser storage may be unavailable.")}};
+    function addEvent(text){state.events.unshift({tick:state.tick,text});state.events=state.events.slice(0,40);renderLog();save()}
+    function needLabel(value){return value<25?"low":value<60?"moderate":"good"}
+    function rankFor(c){if(c.experience>=180&&c.skills>=75)return "Civic leader";if(c.experience>=100||c.skills>=65)return "Business / professional";if(c.experience>=35||c.skills>=35)return "Skilled worker";return "Starting out"}
+    function chooseAction(c){
+      const opts=[{name:"Resting at home",score:(100-c.needs.energy)*.8},{name:"Meeting neighbors",score:(100-c.needs.social)*.62+(c.trait.includes("Sociable")?10:0)},{name:`Working as ${c.job}`,score:28+c.needs.purpose*.16+c.skills*.08+(c.trait.includes("Ambitious")?9:0)},{name:`Pursuing goal: ${c.goal}`,score:20+c.needs.purpose*.2+(c.trait.includes("Curious")||c.trait.includes("inventive")?12:0)},{name:"Helping the community",score:24+(c.trait.includes("cooperative")||c.trait.includes("civic-minded")||c.trait.includes("Empathetic")?18:0)}];
+      opts.sort((a,b)=>b.score-a.score);const best=opts[0],near=opts.filter(o=>best.score-o.score<8);return near[Math.floor(Math.random()*near.length)].name;
+    }
+    function simulate(){
+      if(state.paused)return;
+      state.tick++;
+      const pol=policies[state.policy]||policies.balanced;
+      state.nature=clamp(state.nature+pol.nature*.13-.055);
+      state.trust=clamp(state.trust+pol.trust*.12-(state.tension>65?.14:0));
+      const incomes=[];
+      for(const c of state.citizens){
+        c.actionTimer--;
+        c.needs.energy=clamp(c.needs.energy-.35);
+        c.needs.social=clamp(c.needs.social-.18);
+        c.needs.purpose=clamp(c.needs.purpose-.16);
+        if(c.actionTimer<=0){
+          c.action=chooseAction(c);c.actionTimer=4+Math.floor(Math.random()*5);c.history.unshift(c.action);c.history=c.history.slice(0,4);
+          if(c.action.startsWith("Working")){const pay=Math.max(2,Math.round(3+c.skills*.07));c.wealth+=pay;state.treasury+=pol.tax;incomes.push(pay);c.experience+=3;c.skills=clamp(c.skills+.22);c.needs.energy=clamp(c.needs.energy-1.6);c.needs.purpose=clamp(c.needs.purpose+1.6)}
+          else if(c.action==="Resting at home")c.needs.energy=clamp(c.needs.energy+12);
+          else if(c.action==="Meeting neighbors")c.needs.social=clamp(c.needs.social+13);
+          else if(c.action.startsWith("Pursuing goal")){c.needs.purpose=clamp(c.needs.purpose+9);c.experience+=1.2;c.skills=clamp(c.skills+.12)}
+          else if(c.action==="Helping the community"){c.needs.social=clamp(c.needs.social+4);state.trust=clamp(state.trust+.12)}
+          const old=c.rank;c.rank=rankFor(c);if(old!==c.rank)addEvent(`${c.name} advanced to ${c.rank} through experience and skill.`);
+          if(state.inspect&&state.selected===Number(c.id.split("-")[1])-1)renderInspector();
+        }
+      }
+      const avg=state.citizens.reduce((a,c)=>a+c.wealth,0)/state.citizens.length;
+      const low=state.citizens.filter(c=>c.wealth<30).length;
+      const inequality=clamp((avg?state.citizens.reduce((a,c)=>a+Math.max(0,avg-c.wealth),0)/(avg*state.citizens.length):0)*100);
+      state.tension=clamp(state.tension+(inequality>58?.13:-.05)+(state.nature<30?.16:0)+(state.trust<30?.12:0)+pol.tension*.08);
+      if(state.tick%24===0){
+        if(state.tension>75)addEvent("Diplomatic crisis: community tension is high. Choose dialogue and fair policy to reduce escalation risk.");
+        else if(state.nature<25)addEvent("Ecological warning: habitat health is low; restoration may prevent further decline.");
+        else addEvent(`World report: ${low} residents are still building their livelihoods; ${Math.round(state.nature)}% nature balance.`);
+      }
+      if(state.tick%12===0)addEvent(`Simulation checkpoint ${state.tick}: civic policy is ${policies[state.policy].label.toLowerCase()}.`);
+      render();if(state.tick%5===0)save();
+    }
+    function setMeter(id,value){const el=$(id),n=Math.round(value);el.querySelector("i").style.width=`${n}%`;el.className=`meter${n<25?" danger":n<45?" warning":""}`}
+    function renderCitizens(){const root=$("citizens");root.replaceChildren();state.citizens.forEach((c,i)=>{const article=document.createElement("div");article.className=`citizen${state.selected===i?" selected":""}`;const info=document.createElement("div");const name=document.createElement("strong");name.textContent=c.name;const meta=document.createElement("small");meta.textContent=`${c.job} · ${c.rank}`;info.append(name,document.createElement("br"),meta);const button=document.createElement("button");button.type="button";button.textContent="Inspect";button.setAttribute("aria-label",`Inspect ${c.name}`);button.addEventListener("click",()=>{state.selected=i;renderCitizens();renderInspector();save()});article.append(info,button);root.append(article)})}
+    function renderInspector(){const c=state.citizens[state.selected];if(!c)return;const box=$("inspector");box.replaceChildren();const title=document.createElement("strong");title.textContent=state.inspect?`${c.name} · ${c.rank}`:"Inspection is disabled";box.append(title);if(!state.inspect){const p=document.createElement("p");p.textContent="Turn inspection on to view simulated residents.";box.append(p);return}for(const line of [`Personality: ${c.trait}`,`Current action: ${c.action}`,`Goal: ${c.goal}`,`Job: ${c.job} · skill ${Math.round(c.skills)} · experience ${Math.round(c.experience)}`,`Credits: ${Math.round(c.wealth)} (fictional local units)`,`Needs — energy ${needLabel(c.needs.energy)}, social ${needLabel(c.needs.social)}, purpose ${needLabel(c.needs.purpose)}`,`Recent choices: ${c.history.slice(0,3).join(" → ")||"No recorded actions yet"}`]){const p=document.createElement("p");p.textContent=line;box.append(p)}}
+    function renderLog(){const root=$("event-log");root.replaceChildren();state.events.slice(0,18).forEach(e=>{const li=document.createElement("li"),time=document.createElement("time");time.textContent=`DAY ${Math.floor(e.tick/24)+1} · STEP ${e.tick}`;li.append(time,document.createTextNode(e.text));root.append(li)})}
+    function renderPolicies(){const root=$("policy-options");root.replaceChildren();Object.entries(policies).forEach(([key,p])=>{const b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed",String(state.policy===key));const strong=document.createElement("strong");strong.textContent=p.label;const small=document.createElement("small");small.textContent=p.description;b.append(strong,small);b.addEventListener("click",()=>{if(state.policy===key)return;state.policy=key;addEvent(`Creator policy change: ${p.label}. Change recorded in the local audit log.`);render()});root.append(b)})}
+    function render(){ $("population").textContent=state.citizens.length;$("trust-value").textContent=`${Math.round(state.trust)}%`;$("nature-value").textContent=`${Math.round(state.nature)}%`;$("tension-value").textContent=`${Math.round(state.tension)}%`;setMeter("trust-meter",state.trust);setMeter("nature-meter",state.nature);setMeter("tension-meter",state.tension);$("government").textContent=`Civic council · ${policies[state.policy].label}`;$("treasury").textContent=`Public treasury: ${Math.round(state.treasury)} fictional credits · Day ${Math.floor(state.tick/24)+1}`;$("pause").textContent=state.paused?"Resume simulation":"Pause simulation";$("pause").setAttribute("aria-pressed",String(state.paused));$("inspect-toggle").textContent=`Inspection: ${state.inspect?"on":"off"}`;$("inspect-toggle").setAttribute("aria-pressed",String(state.inspect));renderPolicies();renderCitizens();renderInspector();renderLog() }
+    $("pause").addEventListener("click",()=>{state.paused=!state.paused;addEvent(`Simulation ${state.paused?"paused":"resumed"} by local creator.`);render()});
+    $("inspect-toggle").addEventListener("click",()=>{state.inspect=!state.inspect;addEvent(`Resident inspection ${state.inspect?"enabled":"disabled"}; setting is visible in the local audit log.`);render()});
+    $("deescalate").addEventListener("click",()=>{if(state.treasury<25){addEvent("Peace talks could not be funded: the public treasury needs at least 25 credits.");return}state.treasury-=25;state.tension=clamp(state.tension-12);state.trust=clamp(state.trust+3);addEvent("Funded peaceful dialogue: tension reduced and community trust improved. No combat is simulated.");render()});
+    $("reset").addEventListener("click",()=>{if(!confirm("Reset this browser's Society Lab simulation?"))return;state=fresh();save();render();});
+    render();setInterval(simulate,1000);
+  })();
+  </script>
+</body>
+</html>
